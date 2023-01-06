@@ -4,7 +4,7 @@
     使用方式基本上就是重複讀取getopt回傳option字元直到回傳-1。
     請注意：這只是蓋略說明，很多細節仍然需要參考manpage，例如哪些是Gnu的特別功能還有一些細節的參數操作等。
     http://wen00072-blog.logdown.com/posts/171197-using-getopt-parse-command-line-parameter
-    
+
     參數
         int argc: main的argument count
         char **argv: main的argument vector
@@ -19,7 +19,7 @@
         ex: option -a, 參數arg1，下命令會是./cmd -aarg1
         範例: 支援-a, -b, -c 參數, -d 參數，-e optional 參數
         "abc:d:e::"
-    
+
     變數 (僅列舉)
         optopt
             如果遇到不支援的option或是不合語法的option操作，getopt會回傳?，
@@ -29,7 +29,7 @@
             記得比較optind和argc看看還有沒有非option的參數要處理
         範例 ./cmd -a -b 123 456，跑完getopt後還有123 456要處理。
 */
-#include <unistd.h>  /* getopt */
+#include <unistd.h> /* getopt */
 #include <stdio.h>
 
 int main(int argc, char **argv)
@@ -37,55 +37,61 @@ int main(int argc, char **argv)
     int cmd_opt = 0;
 
     fprintf(stderr, "argc:%d\n", argc);
-    while(1) {
+    while (1)
+    {
         fprintf(stderr, "proces index:%d\n", optind);
         cmd_opt = getopt(argc, argv, "abc:d:e::");
 
         /* End condition always first */
-        if (cmd_opt == -1) {
+        if (cmd_opt == -1)
+        {
             break;
         }
 
         /* Print option when it is valid */
-        if (cmd_opt != '?') {
+        if (cmd_opt != '?')
+        {
             fprintf(stderr, "option:-%c\n", cmd_opt);
         }
 
         /* Lets parse */
-        switch (cmd_opt) {
-            /* No args */
-            case 'a':
-            case 'b':
-                break;
+        switch (cmd_opt)
+        {
+        /* No args */
+        case 'a':
+        case 'b':
+            break;
 
-            /* Single arg */
-            case 'c':
-            case 'd':
+        /* Single arg */
+        case 'c':
+        case 'd':
+            fprintf(stderr, "option arg:%s\n", optarg);
+            break;
+
+        /* Optional args */
+        case 'e':
+            if (optarg)
+            {
                 fprintf(stderr, "option arg:%s\n", optarg);
-                break;
+            }
+            break;
 
-            /* Optional args */
-            case 'e':
-                if (optarg) {
-                    fprintf(stderr, "option arg:%s\n", optarg);
-                }
-                break;
-
-
-            /* Error handle: Mainly missing arg or illegal option */
-            case '?':
-                fprintf(stderr, "Illegal option:-%c\n", isprint(optopt)?optopt:'#');
-                break;
-            default:
-                fprintf(stderr, "Not supported option\n");
-                break;
+        /* Error handle: Mainly missing arg or illegal option */
+        case '?':
+            fprintf(stderr, "Illegal option:-%c\n", isprint(optopt) ? optopt : '#');
+            break;
+        default:
+            fprintf(stderr, "Not supported option\n");
+            break;
         }
     }
 
     /* Do we have args? */
-    if (argc > optind) {
+    if (argc > optind)
+    {
         int i = 0;
-        for (i = optind; i < argc; i++) {
+        for (i = optind; i < argc; i++)
+        {
             fprintf(stderr, "argv[%d] = %s\n", i, argv[i]);
         }
     }
