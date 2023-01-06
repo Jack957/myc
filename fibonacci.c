@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
    else
    {
       printf("How many Fibonacci series numbers would you like to generate?\n");
-      scanf("%d", &n);
+      scanf_s("%d", &n);
    }
 
    if (n > 0)
